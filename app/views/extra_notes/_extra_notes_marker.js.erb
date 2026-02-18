@@ -4,3 +4,6 @@ $("#" + extraNotesMarkerId).remove();
 <% if journal.extra_attribute.present? %>
   $("#change-<%= journal.id %> .journal-meta").prepend('<%= escape_javascript(render partial: "extra_notes/extra_notes_marker", formats: [:html], locals: { journal: journal }) %>');
 <% end %>
+
+// Refresh history tab
+$("#history .tabs a.selected").trigger("click");

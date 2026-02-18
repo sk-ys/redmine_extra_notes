@@ -1,0 +1,24 @@
+<script>
+// Override the default showIssueHistory function to handle the "Extra Notes" tab
+showIssueHistoryWithoutExtraNotes = window.showIssueHistory;
+window.showIssueHistory = function(journal, url) {
+  if (journal === 'extra_notes') {
+    showIssueHistoryWithoutExtraNotes('notes', url);
+    tab_content.parent().children('div.tabs').find('a').removeClass('selected');
+    $('#tab-extra_notes').addClass('selected');
+  } else {
+    showIssueHistoryWithoutExtraNotes(journal, url);
+  }
+  
+  switch(journal) {
+    case 'notes':
+      $('#tab-content-history').find('.journal:has(.extra-notes-label)').hide();
+      break;
+    case 'extra_notes':
+      $('#tab-content-history').find('.journal:not(:has(.extra-notes-label))').hide();
+      break;
+  }
+
+  return false;
+}
+</script>
