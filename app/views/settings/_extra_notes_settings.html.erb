@@ -1,4 +1,10 @@
 <p>
+  <label><%= l(:label_use_tab, scope: :extra_notes) %></label>
+  <% Rails.logger.info @settings.inspect %>
+  <input type="hidden" name="settings[use_tab]" value="0" />
+  <%= check_box_tag 'settings[use_tab]', '1', @settings['use_tab'].nil? || @settings['use_tab'] == '1' %>
+</p>
+<p>
   <label><%= l(:label_tab_label, scope: :extra_notes) %></label>
   <%= text_field_tag 'settings[tab_label]', @settings['tab_label'], size: 30 %><br/>
   <small class="explain"><%= l(:label_tab_label_explanation, scope: :extra_notes) %></small>

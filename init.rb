@@ -5,7 +5,8 @@ Redmine::Plugin.register :redmine_extra_notes do
   url 'http://github.com/sk-ys/redmine_extra_notes'
   author_url 'http://github.com/sk-ys'
 
-  settings default: { 'tab_label' => '' }, partial: 'settings/extra_notes_settings'
+  settings default: { 'use_tab' => '1', 'tab_label' => '' },
+    partial: 'settings/extra_notes_settings'
 end
 
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/lib')

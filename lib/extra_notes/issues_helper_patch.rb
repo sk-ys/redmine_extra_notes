@@ -6,6 +6,10 @@ module ExtraNotes
           def issue_history_tabs_with_extra_notes()
             tabs = issue_history_tabs_without_extra_notes()
             
+            if Setting.plugin_redmine_extra_notes['use_tab'] == '0'
+              return tabs
+            end
+            
             # Add an "Extra Notes" tab if there are any journals with extra attributes
             if @journals.present?
               has_extra_notes = @journals.any? { |journal| journal.extra_attribute.present? }
