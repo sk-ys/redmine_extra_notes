@@ -21,4 +21,12 @@ window.showIssueHistory = function(journal, url) {
 
   return false;
 }
+
+// Replace the default "Extra Notes" tab label with the custom title from settings, if provided
+<% custom_tab_label = Setting.plugin_redmine_extra_notes['tab_label'].presence %>
+<% if custom_tab_label %>
+document.addEventListener('DOMContentLoaded', function() {
+  $("#tab-extra_notes").text("<%= j(custom_tab_label) %>");
+});
+<% end %>
 </script>

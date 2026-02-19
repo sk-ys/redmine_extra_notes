@@ -1,2 +1,5 @@
 ja:
   label_extra_notes: "拡張コメント"
+  extra_notes:
+    label_tab_label: "タブのラベル"
+    label_tab_label_explanation: "拡張コメントのタブに表示するラベルを設定します。空白の場合は「拡張コメント」が表示されます。"
