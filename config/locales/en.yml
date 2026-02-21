@@ -4,3 +4,5 @@ en:
     label_tab_label: "Tab label"
     label_tab_label_explanation: "Set the label to be displayed on the Extra Notes tab. If left blank, \"Extra Notes\" will be displayed."
     label_use_tab: "Use tab"
+    label_extra_notes_label: "Extra notes label"
+    label_extra_notes_label_explanation: "Set the label to be displayed in the extra notes header."

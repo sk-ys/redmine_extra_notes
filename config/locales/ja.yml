@@ -4,3 +4,5 @@ ja:
     label_tab_label: "タブのラベル"
     label_tab_label_explanation: "拡張コメントのタブに表示するラベルを設定します。空白の場合は「拡張コメント」が表示されます。"
     label_use_tab: "タブを使用する"
+    label_extra_notes_label: "拡張コメントのラベル"
+    label_extra_notes_label_explanation: "拡張コメントのヘッダーに表示するラベルを設定します。"
