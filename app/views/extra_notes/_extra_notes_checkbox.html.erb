@@ -1,6 +1,10 @@
-<span style="margin-top: 10px;">
-  <label>
-    <%= check_box_tag 'extra_note', '1', @journal&.extra_attribute.present? %>
-    <%= Setting.plugin_redmine_extra_notes['tab_label'].presence || l(:label_extra_notes) %>
-  </label>
-</span>
+<% journal = local_assigns[:journal] %>
+<% ExtraNotesHelper.enabled_note_types.each do |note_type| %>
+  <% checked = journal ? journal.extra_attributes.exists?(note_type: note_type['id']) : false %>
+  <span style="margin-top: 10px;">
+    <label>
+      <%= check_box_tag "extra_note[#{note_type['id']}]", '1', checked %>
+      <%= note_type['label'].presence || l(:label_extra_notes) %>
+    </label>
+  </span>
+<% end %>

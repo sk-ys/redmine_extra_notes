@@ -5,27 +5,35 @@ module ExtraNotes
         if method_defined?(:issue_history_tabs)
           def issue_history_tabs_with_extra_notes()
             tabs = issue_history_tabs_without_extra_notes()
-            
-            if Setting.plugin_redmine_extra_notes['use_tab'] == '0'
-              return tabs
+
+            return tabs unless @issue.project.module_enabled?(:extra_notes) && @journals.present?
+
+            tab_types = ExtraNotesHelper.enabled_note_types.select { |t| t['use_tab'].to_s != '0' }
+            return tabs if tab_types.empty?
+
+            # Collect all note_types present in @journals with a single query
+            journal_ids = @journals.map(&:id)
+            note_types_in_journals = ExtraJournalAttribute.where(journal_id: journal_ids).distinct.pluck(:note_type)
+
+            notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
+            insert_position = (notes_index ? notes_index : tabs.size) + 1
+            offset = 0
+
+            tab_types.each do |note_type|
+              next unless note_types_in_journals.include?(note_type['id'])
+
+              tab_name = "extra_notes_#{note_type['id']}"
+              tabs.insert(insert_position + offset, {
+                name: tab_name,
+                label: :label_extra_notes,
+                onclick: "showIssueHistory(\"#{tab_name}\", this.href)"
+              })
+              offset += 1
             end
-            
-            # Add an "Extra Notes" tab if there are any journals with extra attributes
-            if @issue.project.module_enabled?(:extra_notes) && @journals.present?
-              has_extra_notes = @journals.any? { |journal| journal.extra_attribute.present? }
-              if has_extra_notes
-                notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
-                tabs.insert((notes_index ? notes_index : tabs.size) + 1, {
-                  name: 'extra_notes',
-                  label: :label_extra_notes,
-                  onclick: 'showIssueHistory("extra_notes", this.href)'
-                })
-              end
-            end
-            
+
             tabs
           end
-          
+
           alias_method :issue_history_tabs_without_extra_notes, :issue_history_tabs
           alias_method :issue_history_tabs, :issue_history_tabs_with_extra_notes
         end

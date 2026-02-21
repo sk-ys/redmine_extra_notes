@@ -5,8 +5,11 @@ Redmine::Plugin.register :redmine_extra_notes do
   url 'http://github.com/sk-ys/redmine_extra_notes'
   author_url 'http://github.com/sk-ys'
 
-  settings default: { 'use_tab' => '1', 'tab_label' => 'Extra notes', 'extra_notes_label' => '[EXTRA]' },
-    partial: 'settings/extra_notes_settings'
+  settings default: {
+    'note_types' => {
+      '0' => { 'id' => 'default', 'label' => '[EXTRA]', 'tab_label' => 'Extra notes', 'use_tab' => '1', 'enabled' => '1' }
+    }
+  }, partial: 'settings/extra_notes_settings'
 
   project_module :extra_notes do
     permission :add_extra_notes, {}
