@@ -7,6 +7,11 @@ Redmine::Plugin.register :redmine_extra_notes do
 
   settings default: { 'use_tab' => '1', 'tab_label' => 'Extra notes', 'extra_notes_label' => '[EXTRA]' },
     partial: 'settings/extra_notes_settings'
+
+  project_module :extra_notes do
+    permission :add_extra_notes, {}
+    permission :edit_extra_notes, {}
+  end
 end
 
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/lib')

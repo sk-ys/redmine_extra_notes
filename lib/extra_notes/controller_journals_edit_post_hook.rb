@@ -5,6 +5,7 @@ module ExtraNotes
       params = context[:params]
       
       return unless journal&.persisted?
+      return unless User.current.allowed_to?(:edit_extra_notes, journal.issue.project)
       
       begin
         if params[:extra_note].present?

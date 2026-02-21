@@ -11,7 +11,7 @@ module ExtraNotes
             end
             
             # Add an "Extra Notes" tab if there are any journals with extra attributes
-            if @journals.present?
+            if @issue.project.module_enabled?(:extra_notes) && @journals.present?
               has_extra_notes = @journals.any? { |journal| journal.extra_attribute.present? }
               if has_extra_notes
                 notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }

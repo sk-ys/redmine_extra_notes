@@ -1,4 +1,4 @@
-<% if journal.extra_attribute.present? %>
+<% if journal.issue.project.module_enabled?(:extra_notes) && journal.extra_attribute.present? %>
   <span class="extra-notes-label" id="journal-<%= journal.id %>-extra_notes_marker">
     <%= Setting.plugin_redmine_extra_notes['extra_notes_label'] || '[EXTRA]' %>
   </span>
