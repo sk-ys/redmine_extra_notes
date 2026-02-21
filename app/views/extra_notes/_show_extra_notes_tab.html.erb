@@ -1,5 +1,8 @@
 <% if issue.project.module_enabled?(:extra_notes) %>
-<% tab_types = ExtraNotesHelper.enabled_note_types.select { |t| t['use_tab'].to_s != '0' } %>
+<% all_note_types = ExtraNotesHelper.note_types %>
+<% tab_types = all_note_types.each_with_index
+     .select { |t, _| t['enabled'].to_s != '0' && t['use_tab'].to_s != '0' }
+     .map { |t, i| t.merge('order' => i + 1) } %>
 <% if tab_types.any? %>
 
 <script>
@@ -40,7 +43,7 @@
 <% tab_types.each do |nt| %>
     (function() {
       var el = document.getElementById('tab-extra_notes_<%= j(nt['id']) %>');
-      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} [#{nt['id']}]") %>';
+      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} [#{nt['order']}]") %>';
     })();
 <% end %>
   });

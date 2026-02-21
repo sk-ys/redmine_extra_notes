@@ -1,6 +1,7 @@
 <table id="extra-notes-types-table" style="border-collapse: collapse; width: 100%;">
   <thead>
     <tr>
+      <th style="padding: 4px 8px; width: 20px;"></th>
       <th style="padding: 4px 8px; text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
       <th style="padding: 4px 8px; text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
       <th style="padding: 4px 8px; text-align: center;"><%= l(:label_use_tab, scope: :extra_notes) %></th>
@@ -11,6 +12,7 @@
   <tbody id="extra-notes-types-body">
     <% ExtraNotesHelper.note_types.each_with_index do |nt, i| %>
     <tr>
+      <td style="padding: 4px 8px; cursor: move; text-align: center;" class="drag-handle">&#8597;</td>
       <td style="padding: 4px 8px;">
         <input type="hidden" name="settings[note_types][<%= i %>][id]" value="<%= nt['id'] %>">
         <%= text_field_tag "settings[note_types][#{i}][label]", nt['label'], size: 20 %>
@@ -41,12 +43,22 @@
 </p>
 
 <script>
-var extraNoteTypeCount = <%= ExtraNotesHelper.note_types.size %>;
 var btnDeleteLabel = '<%= j(l(:button_delete)) %>';
+
+function reindexNoteTypeRows() {
+  document.querySelectorAll('#extra-notes-types-body tr').forEach(function(tr, newIdx) {
+    tr.querySelectorAll('input, select').forEach(function(el) {
+      if (el.name) {
+        el.name = el.name.replace(/\[note_types\]\[\d+\]/, '[note_types][' + newIdx + ']');
+      }
+    });
+  });
+}
 
 function removeExtraNoteType(e) {
   e.preventDefault();
   this.closest('tr').remove();
+  reindexNoteTypeRows();
 }
 
 document.querySelectorAll('.remove-extra-note-type').forEach(function(btn) {
@@ -55,11 +67,12 @@ document.querySelectorAll('.remove-extra-note-type').forEach(function(btn) {
 
 document.getElementById('add-extra-note-type').addEventListener('click', function(e) {
   e.preventDefault();
-  var idx = extraNoteTypeCount++;
-  var typeId = 'nt_' + Date.now();
   var tbody = document.getElementById('extra-notes-types-body');
+  var idx = tbody.querySelectorAll('tr').length;
+  var typeId = 'nt_' + Date.now();
   var tr = document.createElement('tr');
   tr.innerHTML =
+    '<td style="padding:4px 8px;cursor:move;text-align:center;" class="drag-handle">&#8597;</td>' +
     '<td style="padding:4px 8px;">' +
       '<input type="hidden" name="settings[note_types][' + idx + '][id]" value="' + typeId + '">' +
       '<input type="text" name="settings[note_types][' + idx + '][label]" size="20">' +
@@ -80,5 +93,15 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
     '</td>';
   tbody.appendChild(tr);
   tr.querySelector('.remove-extra-note-type').addEventListener('click', removeExtraNoteType);
+});
+
+$(function() {
+  $('#extra-notes-types-body').sortable({
+    handle: '.drag-handle',
+    axis: 'y',
+    update: function() {
+      reindexNoteTypeRows();
+    }
+  });
 });
 </script>
