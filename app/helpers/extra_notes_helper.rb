@@ -27,6 +27,9 @@ module ExtraNotesHelper
   end
 
   def self.find_note_type(id)
-    note_types.find { |t| t['id'] == id }
+    note_types.each_with_index do |t, i|
+      return t.merge('order' => i + 1) if t['id'] == id
+    end
+    nil
   end
 end

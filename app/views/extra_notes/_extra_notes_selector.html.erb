@@ -2,7 +2,7 @@
 <% all_note_types = ExtraNotesHelper.note_types %>
 <% note_type_options = all_note_types.each_with_index
      .select { |t, _| t['enabled'].to_s != '0' }
-     .map { |t, i| [t['label'].presence || "#{l(:label_extra_notes)} [#{i + 1}]", t['id']] } %>
+     .map { |t, i| [t['label'].presence || "#{l(:label_extra_notes)} ##{i + 1}", t['id']] } %>
 <% if note_type_options.any? %>
   <span style="margin-top: 10px;">
     <label>

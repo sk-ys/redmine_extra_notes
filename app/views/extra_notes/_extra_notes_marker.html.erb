@@ -4,7 +4,7 @@
     <span class="extra-notes-label"
           data-note-type="<%= journal.extra_attribute.note_type %>"
           id="journal-<%= journal.id %>-extra_notes_marker_<%= journal.extra_attribute.note_type %>">
-      <%= note_type['label'].presence || '[EXTRA]' %>
+      <%= note_type['label'].presence || "[EXTRA##{note_type['order']}]" %>
     </span>
   <% end %>
 <% end %>
