@@ -40,7 +40,7 @@
 <% tab_types.each do |nt| %>
     (function() {
       var el = document.getElementById('tab-extra_notes_<%= j(nt['id']) %>');
-      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || l(:label_extra_notes)) %>';
+      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} [#{nt['id']}]") %>';
     })();
 <% end %>
   });

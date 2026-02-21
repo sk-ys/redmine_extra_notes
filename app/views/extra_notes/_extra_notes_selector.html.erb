@@ -6,7 +6,7 @@
       <%= l(:label_extra_notes) %>:
       <%= select_tag 'extra_note_type',
             options_for_select(
-              [['', '']] + note_types.map { |t| [t['label'].presence || l(:label_extra_notes), t['id']] },
+              [['', '']] + note_types.map { |t| [t['label'].presence || "#{l(:label_extra_notes)} [#{t['id']}]", t['id']] },
               journal&.extra_attribute&.note_type
             ) %>
     </label>
