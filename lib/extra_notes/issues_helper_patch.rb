@@ -14,11 +14,12 @@ module ExtraNotes
             if @journals.present?
               has_extra_notes = @journals.any? { |journal| journal.extra_attribute.present? }
               if has_extra_notes
-                tabs << {
+                notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
+                tabs.insert((notes_index ? notes_index : tabs.size) + 1, {
                   name: 'extra_notes',
                   label: :label_extra_notes,
                   onclick: 'showIssueHistory("extra_notes", this.href)'
-                }
+                })
               end
             end
             
