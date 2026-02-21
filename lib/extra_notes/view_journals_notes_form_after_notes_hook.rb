@@ -4,7 +4,7 @@ module ExtraNotes
       journal = context[:journal]
       if User.current.allowed_to?(:edit_extra_notes, journal.issue.project)
         return context[:controller].send(:render_to_string, {
-          partial: 'extra_notes/extra_notes_checkbox',
+          partial: 'extra_notes/extra_notes_selector',
           locals: { journal: journal }
         })
       end

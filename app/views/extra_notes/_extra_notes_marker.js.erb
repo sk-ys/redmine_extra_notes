@@ -2,7 +2,7 @@
 
 // Clear old extra notes markers for this journal
 $("#change-<%= journal.id %> .extra-notes-label").remove();
-<% if journal.extra_attributes.any? %>
+<% if journal.extra_attribute.present? %>
   $("#change-<%= journal.id %> .journal-meta").prepend('<%= escape_javascript(render partial: "extra_notes/extra_notes_marker", formats: [:html], locals: { journal: journal }) %>');
 <% end %>
 
