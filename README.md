@@ -5,13 +5,13 @@ This Redmine plugin lets you manage issue notes as either normal or extra.
 
 ## Features
 
-- When adding a note, use the "Extra Notes" checkbox to mark it as extra.
-- Extra notes show the `[EXTRA]` label by default.
-- The label for extra notes is customizable in the plugin settings.
-- Updates the issue history tab behavior:
-  - **Notes**: shows normal notes only.
-  - **Extra Notes**: shows extra notes only.
-  - This tab can be enabled or disabled in the plugin settings.
+- Manage multiple extra note categories (each can be enabled/disabled).
+- Choose a category from a dropdown when adding or editing a note.
+- Each category has its own marker label and optional history tab label.
+- Categories can be reordered in settings (drag and drop).
+- History tabs can be enabled or disabled per category:
+   - **Notes**: shows normal notes only.
+   - **Extra Notes #N**: shows notes for that category only.
 
 ## Installation
 
@@ -45,14 +45,20 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 - Add extra notes (`add_extra_notes`): Allows users to add extra notes to issues.
 - Edit extra notes (`edit_extra_notes`): Allows users to edit extra notes on issues.
 
+### Settings
+
+- Add or remove categories in the plugin settings screen.
+- Configure each category's marker label, tab label, tab usage, and enabled state.
+- Reorder categories via drag and drop.
+
 ### How to use
 
 1. Enable the "Extra notes" module for each project:
    - Go to the project settings in Redmine.
    - On the "Modules" tab, check "Extra notes" and save.
-2. When adding a note, check "Extra Notes" to save it as an Extra note (requires permission).
-3. If enabled, select the "Extra Notes" tab to view extra notes.
-   - (If the tab is disabled, extra notes will appear in the regular "Notes" tab as usual.)
+2. When adding or editing a note, choose a category from the Extra Notes dropdown (requires permission).
+3. If enabled, select the matching "Extra Notes" tab to view notes for that category.
+   - If a category's tab is disabled, those notes appear in the regular "Notes" tab.
 
 ## Uninstall
 
