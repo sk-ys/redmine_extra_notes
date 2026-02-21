@@ -1,46 +1,92 @@
-<table id="extra-notes-types-table" style="border-collapse: collapse; width: 100%;">
+<% if (Redmine::VERSION::MAJOR > 6) || (Redmine::VERSION::MAJOR == 6 && Redmine::VERSION::MINOR >= 1) %>
+  <% add_button_html = link_to(sprite_icon('add', l(:button_add)), '#', class: 'icon icon-add', id: 'add-extra-note-type') %>
+  <% del_button_html = link_to(sprite_icon('del', l(:button_delete)), '#', class: 'remove-extra-note-type icon icon-del') %>
+<% else %>
+  <% add_button_html = link_to(l(:button_add), '#', class: 'icon icon-add', id: 'add-extra-note-type') %>
+  <% del_button_html = link_to(l(:button_delete), '#', class: 'remove-extra-note-type icon icon-del') %>
+<% end %>
+
+<% content_for :header_tags do %>
+<style>
+  #extra-notes-types-table {
+    border-collapse: collapse;
+    width: 100%;
+    thead tr {
+        border-bottom: 1px solid #ccc;
+    }
+    thead::after {
+      content: "";
+      display: block;
+      height: 4px;
+    }
+    td {
+      border-bottom: 1px solid #eee;
+    }
+    th, td {
+      padding: 4px 8px;
+    }
+    .drag-handle {
+      cursor: move;
+      text-align: center;
+    }
+    .order {
+      text-align: right;
+    }
+  }
+  .box.tabular.settings p {
+    padding-left: 0;
+  }
+
+  #add-extra-note-type {
+    float: right;
+    margin: 0 10px;
+    display: block;
+  }
+</style>
+<% end %>
+<p>
+  <%= l(:label_note_types_explanation, scope: :extra_notes) %>
+</p>
+<%= add_button_html %>
+<table id="extra-notes-types-table">
   <thead>
     <tr>
-      <th style="padding: 4px 8px; width: 20px;"></th>
-      <th style="padding: 4px 8px; text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
-      <th style="padding: 4px 8px; text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
-      <th style="padding: 4px 8px; text-align: center;"><%= l(:label_use_tab, scope: :extra_notes) %></th>
-      <th style="padding: 4px 8px; text-align: center;"><%= l(:label_enabled, scope: :extra_notes) %></th>
+      <th style="width: 20px;"></th>
+      <th class="order">#</th>
+      <th style="text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
+      <th style="text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
+      <th style="text-align: center;"><%= l(:label_use_tab, scope: :extra_notes) %></th>
+      <th style="text-align: center;"><%= l(:label_enabled, scope: :extra_notes) %></th>
       <th></th>
     </tr>
   </thead>
   <tbody id="extra-notes-types-body">
     <% ExtraNotesHelper.note_types.each_with_index do |nt, i| %>
     <tr>
-      <td style="padding: 4px 8px; cursor: move; text-align: center;" class="drag-handle">&#8597;</td>
-      <td style="padding: 4px 8px;">
+      <td class="drag-handle">&#8597;</td>
+      <td class="order"><%= i + 1 %></td>
+      <td>
+        <%= text_field_tag "settings[note_types][#{i}][tab_label]", nt['tab_label'], size: 20 %>
+      </td>
+      <td>
         <input type="hidden" name="settings[note_types][<%= i %>][id]" value="<%= nt['id'] %>">
         <%= text_field_tag "settings[note_types][#{i}][label]", nt['label'], size: 20 %>
       </td>
-      <td style="padding: 4px 8px;">
-        <%= text_field_tag "settings[note_types][#{i}][tab_label]", nt['tab_label'], size: 20 %>
-      </td>
-      <td style="padding: 4px 8px; text-align: center;">
+      <td style="text-align: center;">
         <input type="hidden" name="settings[note_types][<%= i %>][use_tab]" value="0">
         <%= check_box_tag "settings[note_types][#{i}][use_tab]", '1', nt['use_tab'].to_s != '0' %>
       </td>
-      <td style="padding: 4px 8px; text-align: center;">
+      <td style="text-align: center;">
         <input type="hidden" name="settings[note_types][<%= i %>][enabled]" value="0">
         <%= check_box_tag "settings[note_types][#{i}][enabled]", '1', nt['enabled'].to_s != '0' %>
       </td>
-      <td style="padding: 4px 8px;">
-        <a href="#" class="remove-extra-note-type icon icon-del"><%= l(:button_delete) %></a>
+      <td>
+        <%= del_button_html %>
       </td>
     </tr>
     <% end %>
   </tbody>
 </table>
-<p>
-  <a href="#" id="add-extra-note-type" class="icon icon-add"><%= l(:button_add) %></a>
-</p>
-<p>
-  <small class="explain"><%= l(:label_note_types_explanation, scope: :extra_notes) %></small>
-</p>
 
 <script>
 var btnDeleteLabel = '<%= j(l(:button_delete)) %>';
@@ -52,6 +98,7 @@ function reindexNoteTypeRows() {
         el.name = el.name.replace(/\[note_types\]\[\d+\]/, '[note_types][' + newIdx + ']');
       }
     });
+    tr.querySelector('.order').textContent = newIdx + 1;
   });
 }
 
@@ -72,24 +119,25 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
   var typeId = 'nt_' + Date.now();
   var tr = document.createElement('tr');
   tr.innerHTML =
-    '<td style="padding:4px 8px;cursor:move;text-align:center;" class="drag-handle">&#8597;</td>' +
-    '<td style="padding:4px 8px;">' +
+    '<td class="drag-handle">&#8597;</td>' +
+    '<td class="order">' + (idx + 1) + '</td>' +
+    '<td>' +
+      '<input type="text" name="settings[note_types][' + idx + '][tab_label]" size="20">' +
+    '</td>' +
+    '<td>' +
       '<input type="hidden" name="settings[note_types][' + idx + '][id]" value="' + typeId + '">' +
       '<input type="text" name="settings[note_types][' + idx + '][label]" size="20">' +
     '</td>' +
-    '<td style="padding:4px 8px;">' +
-      '<input type="text" name="settings[note_types][' + idx + '][tab_label]" size="20">' +
-    '</td>' +
-    '<td style="padding:4px 8px;text-align:center;">' +
+    '<td style="text-align:center;">' +
       '<input type="hidden" name="settings[note_types][' + idx + '][use_tab]" value="0">' +
       '<input type="checkbox" name="settings[note_types][' + idx + '][use_tab]" value="1" checked>' +
     '</td>' +
-    '<td style="padding:4px 8px;text-align:center;">' +
+    '<td style="text-align:center;">' +
       '<input type="hidden" name="settings[note_types][' + idx + '][enabled]" value="0">' +
       '<input type="checkbox" name="settings[note_types][' + idx + '][enabled]" value="1" checked>' +
     '</td>' +
-    '<td style="padding:4px 8px;">' +
-      '<a href="#" class="remove-extra-note-type icon icon-del">' + btnDeleteLabel + '</a>' +
+    '<td>' +
+      '<%= del_button_html %>' +
     '</td>';
   tbody.appendChild(tr);
   tr.querySelector('.remove-extra-note-type').addEventListener('click', removeExtraNoteType);
