@@ -4,7 +4,7 @@ module ExtraNotes
       issue = context[:issue]
       if issue && (User.current.allowed_to?(:add_extra_notes, issue.project) || User.current.allowed_to?(:edit_extra_notes, issue.project))
         return context[:controller].send(:render_to_string, {
-          partial: 'extra_notes/extra_notes_checkbox',
+          partial: 'extra_notes/extra_notes_selector',
           locals: { issue: issue }
         })
       end

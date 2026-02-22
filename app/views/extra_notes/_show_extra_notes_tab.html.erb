@@ -1,36 +1,54 @@
 <% if issue.project.module_enabled?(:extra_notes) %>
+<% all_note_types = ExtraNotesHelper.note_types %>
+<% tab_types = all_note_types.each_with_index
+     .select { |t, _| t['enabled'].to_s != '0' && t['use_tab'].to_s != '0' }
+     .map { |t, i| t.merge('order' => i + 1) } %>
+<% if tab_types.any? %>
 
 <script>
-// Override the default showIssueHistory function to handle the "Extra Notes" tab
-showIssueHistoryWithoutExtraNotes = window.showIssueHistory;
-window.showIssueHistory = function(journal, url) {
-  if (journal === 'extra_notes') {
-    showIssueHistoryWithoutExtraNotes('notes', url);
-    tab_content.parent().children('div.tabs').find('a').removeClass('selected');
-    $('#tab-extra_notes').addClass('selected');
-  } else {
-    showIssueHistoryWithoutExtraNotes(journal, url);
-  }
-  
-  switch(journal) {
-    case 'notes':
-      $('#tab-content-history').find('.journal:has(.extra-notes-label)').hide();
-      break;
-    case 'extra_notes':
-      $('#tab-content-history').find('.journal:not(:has(.extra-notes-label))').hide();
-      break;
-  }
+(function() {
+  var extraNoteTabTypes = <%= raw tab_types.map { |t| { id: t['id'] } }.to_json %>;
 
-  return false;
-}
+  // Override the default showIssueHistory function to handle extra note tabs
+  var originalShowIssueHistory = window.showIssueHistory;
+  window.showIssueHistory = function(journal, url) {
+    var extraTab = extraNoteTabTypes.find(function(t) { return 'extra_notes_' + t.id === journal; });
 
-// Replace the default "Extra Notes" tab label with the custom title from settings, if provided
-<% custom_tab_label = Setting.plugin_redmine_extra_notes['tab_label'].presence %>
-<% if custom_tab_label %>
-document.addEventListener('DOMContentLoaded', function() {
-  $("#tab-extra_notes").text("<%= j(custom_tab_label) %>");
-});
+    if (extraTab) {
+      originalShowIssueHistory('notes', url);
+      $('#tab-content-history').parent().find('.tabs a').removeClass('selected');
+      $('#tab-extra_notes_' + extraTab.id).addClass('selected');
+    } else {
+      originalShowIssueHistory(journal, url);
+    }
+
+    switch(journal) {
+      case 'notes':
+        extraNoteTabTypes.forEach(function(t) {
+          $('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="' + t.id + '"])').hide();
+        });
+        break;
+      default:
+        if (extraTab) {
+          $('#tab-content-history').find('.journal:not(:has(.extra-notes-label[data-note-type="' + extraTab.id + '"]))').hide();
+        }
+        break;
+    }
+
+    return false;
+  };
+
+  // Set custom tab labels from settings
+  document.addEventListener('DOMContentLoaded', function() {
+<% tab_types.each do |nt| %>
+    (function() {
+      var el = document.getElementById('tab-extra_notes_<%= j(nt['id']) %>');
+      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}") %>';
+    })();
 <% end %>
+  });
+})();
 </script>
 
+<% end %>
 <% end %>

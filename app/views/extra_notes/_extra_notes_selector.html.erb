@@ -1,0 +1,15 @@
+<% journal = local_assigns[:journal] %>
+<% all_note_types = ExtraNotesHelper.note_types %>
+<% note_type_options = all_note_types.each_with_index
+     .select { |t, _| t['enabled'].to_s != '0' }
+     .map { |t, i| [t['label'].presence || "#{l(:label_extra_notes)} ##{i + 1}", t['id']] } %>
+<% if note_type_options.any? %>
+  <span style="margin-top: 10px;">
+    <label>
+      <%= l(:label_extra_notes) %>:
+      <%= select_tag 'extra_note_type',
+            options_for_select([['', '']] + note_type_options,
+              journal&.extra_attribute&.note_type) %>
+    </label>
+  </span>
+<% end %>

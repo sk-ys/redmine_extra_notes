@@ -1,5 +1,10 @@
 <% if journal.issue.project.module_enabled?(:extra_notes) && journal.extra_attribute.present? %>
-  <span class="extra-notes-label" id="journal-<%= journal.id %>-extra_notes_marker">
-    <%= Setting.plugin_redmine_extra_notes['extra_notes_label'] || '[EXTRA]' %>
-  </span>
+  <% note_type = ExtraNotesHelper.find_note_type(journal.extra_attribute.note_type) %>
+  <% if note_type && note_type['enabled'].to_s != '0' %>
+    <span class="extra-notes-label"
+          data-note-type="<%= journal.extra_attribute.note_type %>"
+          id="journal-<%= journal.id %>-extra_notes_marker_<%= journal.extra_attribute.note_type %>">
+      <%= note_type['label'].presence || "[EXTRA##{note_type['order']}]" %>
+    </span>
+  <% end %>
 <% end %>
