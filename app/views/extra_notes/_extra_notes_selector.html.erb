@@ -8,7 +8,7 @@
     <label>
       <%= l(:label_note_type, scope: :extra_notes) %>:
       <%= select_tag 'extra_note_type',
-            options_for_select([['', '']] + note_type_options,
+            options_for_select([[l(:label_normal, scope: :extra_notes), '']] + note_type_options,
               journal&.extra_attribute&.note_type) %>
     </label>
   </span>

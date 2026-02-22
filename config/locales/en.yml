@@ -9,3 +9,4 @@ en:
     label_enabled: "Enabled"
     label_note_types_explanation: "Add or remove note categories. Each category can have its own label, tab name, and tab/enabled settings."
     label_note_type: "Note type"
+    label_normal: "Normal"
