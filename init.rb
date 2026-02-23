@@ -30,4 +30,5 @@ Rails.configuration.after_initialize do
   require_dependency 'extra_notes/view_issues_edit_notes_bottom_hook'
   require_dependency 'extra_notes/view_journals_notes_form_after_notes_hook'
   require_dependency 'extra_notes/view_journals_update_js_bottom_hook'
+  require_dependency 'extra_notes/controller_settings_plugin_after_update_hook'
 end
