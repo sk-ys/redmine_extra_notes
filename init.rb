@@ -1,7 +1,7 @@
 Redmine::Plugin.register :redmine_extra_notes do
   name 'Redmine Extra Notes'
   author 'sk-ys'
-  version '0.3.2'
+  version '0.3.3'
   url 'http://github.com/sk-ys/redmine_extra_notes'
   author_url 'http://github.com/sk-ys'
 
