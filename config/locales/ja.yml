@@ -10,3 +10,4 @@ ja:
     label_note_types_explanation: "コメントのカテゴリを追加または削除します。各カテゴリには、独自のラベル、タブ名、タブ使用設定と有効/無効設定を持たせることができます。"
     label_note_type: "コメントの種類"
     label_normal: "通常"
+    confirm_remove_note_type: "コメントの種類を削除してもよろしいですか？（この操作は元に戻せません。）"
