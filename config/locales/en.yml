@@ -10,3 +10,4 @@ en:
     label_note_types_explanation: "Add or remove note categories. Each category can have its own label, tab name, and tab/enabled settings."
     label_note_type: "Note type"
     label_normal: "Normal"
+    confirm_remove_note_type: "Are you sure you want to remove this note type? (This action cannot be undone.)"

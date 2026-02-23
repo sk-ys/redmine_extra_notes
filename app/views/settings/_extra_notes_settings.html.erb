@@ -89,8 +89,8 @@
 </table>
 
 <script>
-var btnDeleteLabel = '<%= j(l(:button_delete)) %>';
-
+var flgRemoveExtraNoteType = false;
+  
 function reindexNoteTypeRows() {
   document.querySelectorAll('#extra-notes-types-body tr').forEach(function(tr, newIdx) {
     tr.querySelectorAll('input, select').forEach(function(el) {
@@ -106,6 +106,7 @@ function removeExtraNoteType(e) {
   e.preventDefault();
   this.closest('tr').remove();
   reindexNoteTypeRows();
+  flgRemoveExtraNoteType = true;
 }
 
 document.querySelectorAll('.remove-extra-note-type').forEach(function(btn) {
@@ -141,6 +142,16 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
     '</td>';
   tbody.appendChild(tr);
   tr.querySelector('.remove-extra-note-type').addEventListener('click', removeExtraNoteType);
+});
+
+document
+  .querySelector('form[action$="/settings/plugin/redmine_extra_notes"]')
+  .addEventListener('submit', (e) => {
+  if (flgRemoveExtraNoteType) {
+    if (!confirm('<%= j l(:confirm_remove_note_type, scope: :extra_notes) %>')) {
+      e.preventDefault();
+    }
+  }
 });
 
 $(function() {
