@@ -5,9 +5,10 @@ en:
   extra_notes:
     label_tab_label: "Tab label"
     label_use_tab: "Use tab"
-    label_extra_notes_label: "Label (marker)"
+    label_extra_notes_label: "Label"
     label_enabled: "Enabled"
     label_note_types_explanation: "Add or remove note categories. Each category can have its own label, tab name, and tab/enabled settings."
     label_note_type: "Note type"
     label_normal: "Normal"
+    label_label_bgcolor: "Label BG color"
     confirm_remove_note_type: "Are you sure you want to remove this note type? (This action cannot be undone.)"

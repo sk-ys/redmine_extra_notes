@@ -1,0 +1,5 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'extra_notes', plugin: 'redmine_extra_notes' %>
+<% end %>
+
+<%= render partial: 'extra_notes/show_extra_notes_tab', locals: { issue: issue } %>
