@@ -7,7 +7,15 @@ Redmine::Plugin.register :redmine_extra_notes do
 
   settings default: {
     'note_types' => {
-      '0' => { 'id' => 'default', 'label' => '[EXTRA]', 'tab_label' => 'Extra notes', 'use_tab' => '1', 'enabled' => '1' }
+      '0' => {
+        'id' => 'default',
+        'label' => '[EXTRA]',
+        'tab_label' => 'Extra notes',
+        'use_tab' => '1',
+        'enabled' => '1',
+        'label_bgcolor_enabled' => '0',
+        'label_bgcolor' => '#ffffff',
+      }
     }
   }, partial: 'settings/extra_notes_settings'
 

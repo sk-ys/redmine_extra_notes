@@ -55,6 +55,7 @@
       <th class="order">#</th>
       <th style="text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
       <th style="text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
+      <th style="text-align: center;"><%= l(:label_label_bgcolor, scope: :extra_notes) %></th>
       <th style="text-align: center;"><%= l(:label_use_tab, scope: :extra_notes) %></th>
       <th style="text-align: center;"><%= l(:label_enabled, scope: :extra_notes) %></th>
       <th></th>
@@ -71,6 +72,12 @@
       <td>
         <input type="hidden" name="settings[note_types][<%= i %>][id]" value="<%= nt['id'] %>">
         <%= text_field_tag "settings[note_types][#{i}][label]", nt['label'], size: 20 %>
+      </td>
+      <td style="text-align: center;">
+        <input type="hidden" name="settings[note_types][<%= i %>][label_bgcolor_enabled]" value="0">
+        <%= check_box_tag "settings[note_types][#{i}][label_bgcolor_enabled]", '1', nt['label_bgcolor_enabled'].to_s == '1' %>
+        <input type="hidden" name="settings[note_types][<%= i %>][label_bgcolor]" value="<%= nt['label_bgcolor'] || '#ffffff' %>">
+        <%= color_field_tag "settings[note_types][#{i}][label_bgcolor]", nt['label_bgcolor'] || '#ffffff', disabled: nt['label_bgcolor_enabled'].to_s != '1' %>
       </td>
       <td style="text-align: center;">
         <input type="hidden" name="settings[note_types][<%= i %>][use_tab]" value="0">
@@ -130,6 +137,12 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
       '<input type="text" name="settings[note_types][' + idx + '][label]" size="20">' +
     '</td>' +
     '<td style="text-align:center;">' +
+      '<input type="hidden" name="settings[note_types][' + idx + '][label_bgcolor_enabled]" value="0">' +
+      '<input type="checkbox" name="settings[note_types][' + idx + '][label_bgcolor_enabled]" value="0">' +
+      '<input type="hidden" name="settings[note_types][' + idx + '][label_bgcolor]" value="#ffffff">' +
+      '<input type="color" name="settings[note_types][' + idx + '][label_bgcolor]" value="#ffffff" disabled>' +
+    '</td>' +
+    '<td style="text-align:center;">' +
       '<input type="hidden" name="settings[note_types][' + idx + '][use_tab]" value="0">' +
       '<input type="checkbox" name="settings[note_types][' + idx + '][use_tab]" value="1" checked>' +
     '</td>' +
@@ -151,6 +164,20 @@ document
     if (!confirm('<%= j l(:confirm_remove_note_type, scope: :extra_notes) %>')) {
       e.preventDefault();
     }
+  }
+});
+
+document
+  .querySelector('form[action$="/settings/plugin/redmine_extra_notes"]')
+  .addEventListener('change', function(e) {
+  const target = e.target;
+  if (
+    target.matches('input[type="checkbox"][name*="[label_bgcolor_enabled]"]')
+  ) {
+    const enabled = target.checked;
+    const colorInput = target.closest('td').querySelector('input[type="color"]');
+    colorInput.disabled = !enabled;
+    target.value = enabled ? '1' : '0';
   }
 });
 

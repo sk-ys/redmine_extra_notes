@@ -5,9 +5,10 @@ ja:
   extra_notes:
     label_tab_label: "タブのラベル"
     label_use_tab: "タブを使用する"
-    label_extra_notes_label: "ラベル（マーカー）"
+    label_extra_notes_label: "ラベル"
     label_enabled: "有効"
     label_note_types_explanation: "コメントのカテゴリを追加または削除します。各カテゴリには、独自のラベル、タブ名、タブ使用設定と有効/無効設定を持たせることができます。"
     label_note_type: "コメントの種類"
     label_normal: "通常"
+    label_label_bgcolor: "ラベルの背景色"
     confirm_remove_note_type: "コメントの種類を削除してもよろしいですか？（この操作は元に戻せません。）"

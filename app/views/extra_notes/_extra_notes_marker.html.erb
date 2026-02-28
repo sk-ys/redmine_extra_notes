@@ -3,7 +3,8 @@
   <% if note_type && note_type['enabled'].to_s != '0' %>
     <span class="extra-notes-label"
           data-note-type="<%= journal.extra_attribute.note_type %>"
-          id="journal-<%= journal.id %>-extra_notes_marker_<%= journal.extra_attribute.note_type %>">
+          id="journal-<%= journal.id %>-extra_notes_marker_<%= journal.extra_attribute.note_type %>"
+          style="<%= 'background-color: ' + note_type['label_bgcolor'] + ';' if note_type['label_bgcolor_enabled'].to_s == '1' %>">
       <%= note_type['label'].presence || "[EXTRA##{note_type['order']}]" %>
     </span>
   <% end %>
