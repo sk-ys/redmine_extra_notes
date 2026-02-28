@@ -38,12 +38,21 @@
     return false;
   };
 
-  // Set custom tab labels from settings
   document.addEventListener('DOMContentLoaded', function() {
 <% tab_types.each do |nt| %>
     (function() {
       var el = document.getElementById('tab-extra_notes_<%= j(nt['id']) %>');
-      if (el) el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}") %>';
+      if (el) {
+        // Set custom tab labels from settings
+        el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}") %>';
+
+        // Show or hide the tab based on whether there are any notes of this type
+        if ($('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="<%= j(nt['id']) %>"])').length > 0) {
+          el.style.display = '';
+        } else {
+          el.style.display = 'none';
+        }
+      }
     })();
 <% end %>
   });
