@@ -11,17 +11,11 @@ module ExtraNotes
             tab_types = ExtraNotesHelper.enabled_note_types.select { |t| t['use_tab'].to_s != '0' }
             return tabs if tab_types.empty?
 
-            # Collect all note_types present in @journals with a single query
-            journal_ids = @journals.map(&:id)
-            note_types_in_journals = ExtraJournalAttribute.where(journal_id: journal_ids).distinct.pluck(:note_type)
-
             notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
             insert_position = (notes_index ? notes_index : tabs.size) + 1
             offset = 0
 
             tab_types.each do |note_type|
-              next unless note_types_in_journals.include?(note_type['id'])
-
               tab_name = "extra_notes_#{note_type['id']}"
               tabs.insert(insert_position + offset, {
                 name: tab_name,
