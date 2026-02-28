@@ -7,7 +7,7 @@ This Redmine plugin lets you manage issue notes as either normal or extra.
 
 - Manage multiple extra note categories (each can be enabled/disabled).
 - Choose a category from a dropdown when adding or editing a note.
-- Each category has its own marker label and optional history tab label.
+- Each category has its own label and optional history tab label.
 - Categories can be reordered in settings (drag and drop).
 - History tabs can be enabled or disabled per category:
    - **Notes**: shows normal notes only.
@@ -48,7 +48,7 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ### Settings
 
 - Add or remove categories in the plugin settings screen.
-- Configure each category's marker label, tab label, tab usage, and enabled state.
+- Configure each category's label, tab label, tab usage, and enabled state.
 - Reorder categories via drag and drop.
 
 ### How to use
