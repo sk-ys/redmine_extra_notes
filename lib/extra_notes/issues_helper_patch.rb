@@ -12,7 +12,7 @@ module ExtraNotes
             return tabs if tab_types.empty?
 
             notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
-            insert_position = (notes_index ? notes_index : tabs.size) + 1
+            insert_position = notes_index ? notes_index + 1 : tabs.size
             offset = 0
 
             tab_types.each do |note_type|
