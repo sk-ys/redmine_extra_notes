@@ -39,6 +39,9 @@ module ExtraNotesHelper
 
     normalized = defaults.merge(type)
 
+    # Strip whitespace from ID
+    normalized['id'] = normalized['id'].to_s.strip
+
     # Ensure boolean-like fields are normalized to "0" or "1" strings
     normalized['use_tab'] = normalized['use_tab'].to_s == '0' ? '0' : '1'
     normalized['enabled'] = normalized['enabled'].to_s == '0' ? '0' : '1'

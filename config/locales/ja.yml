@@ -12,3 +12,6 @@ ja:
     label_normal: "通常"
     label_label_bgcolor: "ラベルの背景色"
     confirm_remove_note_type: "コメントの種類を削除してもよろしいですか？（この操作は元に戻せません。）"
+    label_id: "ID"
+    error_invalid_note_type_id: "ノートタイプIDは空にできません。英数字、アンダースコア、ハイフンのみ使用できます。"
+    error_duplicate_note_type_id: "ノートタイプIDは重複できません。"

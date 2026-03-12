@@ -53,6 +53,7 @@
     <tr>
       <th style="width: 20px;"></th>
       <th class="order">#</th>
+      <th style="text-align: left;"><%= l(:label_id, scope: :extra_notes) %></th>
       <th style="text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
       <th style="text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
       <th style="text-align: center;"><%= l(:label_label_bgcolor, scope: :extra_notes) %></th>
@@ -67,10 +68,12 @@
       <td class="drag-handle">&#8597;</td>
       <td class="order"><%= i + 1 %></td>
       <td>
+        <%= text_field_tag "settings[note_types][#{i}][id]", nt['id'], size: 15 %>
+      </td>
+      <td>
         <%= text_field_tag "settings[note_types][#{i}][tab_label]", nt['tab_label'], size: 20 %>
       </td>
       <td>
-        <input type="hidden" name="settings[note_types][<%= i %>][id]" value="<%= nt['id'] %>">
         <%= text_field_tag "settings[note_types][#{i}][label]", nt['label'], size: 20 %>
       </td>
       <td style="text-align: center;">
@@ -130,10 +133,12 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
     '<td class="drag-handle">&#8597;</td>' +
     '<td class="order">' + (idx + 1) + '</td>' +
     '<td>' +
+      '<input type="text" name="settings[note_types][' + idx + '][id]" value="' + typeId + '" size="15">' +
+    '</td>' +
+    '<td>' +
       '<input type="text" name="settings[note_types][' + idx + '][tab_label]" size="20">' +
     '</td>' +
     '<td>' +
-      '<input type="hidden" name="settings[note_types][' + idx + '][id]" value="' + typeId + '">' +
       '<input type="text" name="settings[note_types][' + idx + '][label]" size="20">' +
     '</td>' +
     '<td style="text-align:center;">' +
@@ -160,6 +165,26 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
 document
   .querySelector('form[action$="/settings/plugin/redmine_extra_notes"]')
   .addEventListener('submit', (e) => {
+  // Validate note type IDs: non-empty, alphanumeric/underscore/hyphen, unique
+  var ids = [];
+  var inputs = document.querySelectorAll('#extra-notes-types-body input[name*="[id]"]');
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+    var val = input.value.trim();
+    if (!val || !/^[A-Za-z0-9_-]+$/.test(val)) {
+      alert('<%= j l(:error_invalid_note_type_id, scope: :extra_notes) %>');
+      input.focus();
+      e.preventDefault();
+      return;
+    }
+    if (ids.includes(val)) {
+      alert('<%= j l(:error_duplicate_note_type_id, scope: :extra_notes) %>');
+      input.focus();
+      e.preventDefault();
+      return;
+    }
+    ids.push(val);
+  }
   if (flgRemoveExtraNoteType) {
     if (!confirm('<%= j l(:confirm_remove_note_type, scope: :extra_notes) %>')) {
       e.preventDefault();

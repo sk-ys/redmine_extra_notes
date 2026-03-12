@@ -12,3 +12,6 @@ en:
     label_normal: "Normal"
     label_label_bgcolor: "Label BG color"
     confirm_remove_note_type: "Are you sure you want to remove this note type? (This action cannot be undone.)"
+    label_id: "ID"
+    error_invalid_note_type_id: "Note type ID must not be empty and may only contain letters, digits, underscores, or hyphens."
+    error_duplicate_note_type_id: "Note type IDs must be unique."
