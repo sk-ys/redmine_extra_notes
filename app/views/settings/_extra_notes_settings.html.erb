@@ -53,6 +53,7 @@
     <tr>
       <th style="width: 20px;"></th>
       <th class="order">#</th>
+      <th style="text-align: left;" title="<%= l(:label_key_description, scope: :extra_notes) %>"><%= l(:label_key, scope: :extra_notes) %></th>
       <th style="text-align: left;"><%= l(:label_tab_label, scope: :extra_notes) %></th>
       <th style="text-align: left;"><%= l(:label_extra_notes_label, scope: :extra_notes) %></th>
       <th style="text-align: center;"><%= l(:label_label_bgcolor, scope: :extra_notes) %></th>
@@ -66,6 +67,9 @@
     <tr>
       <td class="drag-handle">&#8597;</td>
       <td class="order"><%= i + 1 %></td>
+      <td>
+        <%= text_field_tag "settings[note_types][#{i}][key]", nt['key'], size: 20, placeholder: nt['id'] %>
+      </td>
       <td>
         <%= text_field_tag "settings[note_types][#{i}][tab_label]", nt['tab_label'], size: 20 %>
       </td>
@@ -129,6 +133,9 @@ document.getElementById('add-extra-note-type').addEventListener('click', functio
   tr.innerHTML =
     '<td class="drag-handle">&#8597;</td>' +
     '<td class="order">' + (idx + 1) + '</td>' +
+    '<td>' +
+      '<input type="text" name="settings[note_types][' + idx + '][key]" size="20">' +
+    '</td>' +
     '<td>' +
       '<input type="text" name="settings[note_types][' + idx + '][tab_label]" size="20">' +
     '</td>' +

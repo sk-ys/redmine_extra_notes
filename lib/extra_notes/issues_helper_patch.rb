@@ -16,7 +16,7 @@ module ExtraNotes
             offset = 0
 
             tab_types.each do |note_type|
-              tab_name = "extra_notes_#{note_type['id']}"
+              tab_name = "extra_notes_#{ExtraNotesHelper.effective_key(note_type)}"
               tabs.insert(insert_position + offset, {
                 name: tab_name,
                 label: :label_extra_notes,

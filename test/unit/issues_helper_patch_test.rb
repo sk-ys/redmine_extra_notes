@@ -125,4 +125,39 @@ class ExtraNotesIssuesHelperPatchTest < ActiveSupport::TestCase
     assert_includes extra_notes_tab[:onclick], 'showIssueHistory'
     assert_includes extra_notes_tab[:onclick], 'extra_notes_default'
   end
+
+  test 'tab name uses key when key is set on note type' do
+    ExtraNotesHelper.define_singleton_method(:enabled_note_types) do
+      [
+        { 'id' => 'default', 'key' => 'my_key', 'use_tab' => '1', 'enabled' => '1' }
+      ]
+    end
+
+    helper = DummyHelperWithEmptyTabs.new
+    helper.instance_variable_set(:@issue, DummyIssue.new(DummyProject.new))
+    helper.instance_variable_set(:@journals, [Object.new])
+
+    tabs = helper.issue_history_tabs
+
+    assert_equal 1, tabs.size
+    assert_equal 'extra_notes_my_key', tabs[0][:name]
+    assert_includes tabs[0][:onclick], 'extra_notes_my_key'
+  end
+
+  test 'tab name uses id when key is blank' do
+    ExtraNotesHelper.define_singleton_method(:enabled_note_types) do
+      [
+        { 'id' => 'default', 'key' => '', 'use_tab' => '1', 'enabled' => '1' }
+      ]
+    end
+
+    helper = DummyHelperWithEmptyTabs.new
+    helper.instance_variable_set(:@issue, DummyIssue.new(DummyProject.new))
+    helper.instance_variable_set(:@journals, [Object.new])
+
+    tabs = helper.issue_history_tabs
+
+    assert_equal 1, tabs.size
+    assert_equal 'extra_notes_default', tabs[0][:name]
+  end
 end

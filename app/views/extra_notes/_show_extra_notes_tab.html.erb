@@ -7,17 +7,17 @@
 
 <script>
 (function() {
-  var extraNoteTabTypes = <%= raw tab_types.map { |t| { id: t['id'] } }.to_json %>;
+  var extraNoteTabTypes = <%= raw tab_types.map { |t| { id: t['id'], key: ExtraNotesHelper.effective_key(t) } }.to_json %>;
 
   // Override the default showIssueHistory function to handle extra note tabs
   var originalShowIssueHistory = window.showIssueHistory;
   window.showIssueHistory = function(journal, url) {
-    var extraTab = extraNoteTabTypes.find(function(t) { return 'extra_notes_' + t.id === journal; });
+    var extraTab = extraNoteTabTypes.find(function(t) { return 'extra_notes_' + t.key === journal; });
 
     if (extraTab) {
       originalShowIssueHistory('notes', url);
       $('#tab-content-history').parent().find('.tabs a').removeClass('selected');
-      $('#tab-extra_notes_' + extraTab.id).addClass('selected');
+      $('#tab-extra_notes_' + extraTab.key).addClass('selected');
     } else {
       originalShowIssueHistory(journal, url);
     }
@@ -41,7 +41,7 @@
   document.addEventListener('DOMContentLoaded', function() {
 <% tab_types.each do |nt| %>
     (function() {
-      var el = document.getElementById('tab-extra_notes_<%= j(nt['id']) %>');
+      var el = document.getElementById('tab-extra_notes_<%= j(ExtraNotesHelper.effective_key(nt)) %>');
       if (el) {
         // Set custom tab labels from settings
         el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}") %>';

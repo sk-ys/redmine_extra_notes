@@ -3,6 +3,8 @@ ja:
   permission_add_extra_notes: "拡張コメントの追加"
   permission_edit_extra_notes: "拡張コメントの編集"
   extra_notes:
+    label_key: "キー"
+    label_key_description: "省略可。設定した場合、コメント種別IDの代わりにURLハッシュおよびタブIDとして使用されます。すべてのキーおよびIDと重複しない値を指定してください。"
     label_tab_label: "タブのラベル"
     label_use_tab: "タブを使用する"
     label_extra_notes_label: "ラベル"
