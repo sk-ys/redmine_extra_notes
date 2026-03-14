@@ -4,6 +4,7 @@ en:
   permission_edit_extra_notes: Edit extra notes
   extra_notes:
     label_key: "Key"
+    label_key_description: "Optional. When set, used as the URL hash and tab ID instead of the note type ID. Must be unique across all keys and IDs."
     label_tab_label: "Tab label"
     label_use_tab: "Use tab"
     label_extra_notes_label: "Label"
