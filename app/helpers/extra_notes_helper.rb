@@ -43,8 +43,22 @@ module ExtraNotesHelper
     normalized['use_tab'] = normalized['use_tab'].to_s == '0' ? '0' : '1'
     normalized['enabled'] = normalized['enabled'].to_s == '0' ? '0' : '1'
 
+    # Normalize key: strip whitespace, treat blank as nil
+    normalized['key'] = normalize_key(normalized['key'])
+
     normalized
   end
+
+  # Returns the value used as the URL hash and tab id for the given note type.
+  # Uses 'key' when set; falls back to 'id' otherwise.
+  def self.effective_key(note_type)
+    note_type['key'].presence || note_type['id']
+  end
+
+  def self.normalize_key(key)
+    key.to_s.strip.presence
+  end
+
   def self.enabled_note_types
     note_types.select { |t| t['enabled'].to_s != '0' }
   end
@@ -54,5 +68,26 @@ module ExtraNotesHelper
       return t.merge('order' => i + 1) if t['id'] == id
     end
     nil
+  end
+
+  # Returns true when all note type keys and IDs are globally unique.
+  # Both keys and IDs share the same namespace: no two note types may have
+  # the same effective identifier, regardless of whether it comes from a key
+  # or an id field.
+  def self.note_type_keys_unique?(types = note_types)
+    seen = []
+    types.each do |t|
+      id  = t['id'].to_s
+      key = normalize_key(t['key'])
+
+      return false if seen.include?(id)
+      seen << id
+
+      if key
+        return false if seen.include?(key)
+        seen << key
+      end
+    end
+    true
   end
 end

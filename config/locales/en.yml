@@ -3,6 +3,7 @@ en:
   permission_add_extra_notes: Add extra notes
   permission_edit_extra_notes: Edit extra notes
   extra_notes:
+    label_key: "Key"
     label_tab_label: "Tab label"
     label_use_tab: "Use tab"
     label_extra_notes_label: "Label"

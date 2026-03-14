@@ -3,6 +3,7 @@ ja:
   permission_add_extra_notes: "拡張コメントの追加"
   permission_edit_extra_notes: "拡張コメントの編集"
   extra_notes:
+    label_key: "キー"
     label_tab_label: "タブのラベル"
     label_use_tab: "タブを使用する"
     label_extra_notes_label: "ラベル"
