@@ -22,21 +22,26 @@ cd {REDMINE_ROOT}/plugins
 git clone https://github.com/sk-ys/redmine_extra_notes.git
 ```
 
-2. Run the database migration:
+2. Install dependencies:
+
+```bash
+bundle install
+```
+
+3. Run the database migration:
 
 ```bash
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
 
-3. Restart Redmine.
+4. Restart Redmine.
 
-4. Set Permissions:
+5. Set Permissions:
    - After installation, go to "Administration" > "Roles and permissions" in Redmine.
    - Edit each role that should use Extra Notes and enable the following permissions under the "Extra notes" section:
      - Add extra notes (`add_extra_notes`)
      - Edit extra notes (`edit_extra_notes`)
    - Only users with these permissions can add or edit extra notes on issues.
-   - Edit permission
 
 ## Usage
 
