@@ -1,39 +1,61 @@
 module ExtraNotes
   module IssuesHelperPatch
+    def self.apply
+      if defined?(IssuesHelper) && !IssuesHelper.included_modules.include?(ExtraNotes::IssuesHelperPatch)
+        IssuesHelper.include ExtraNotes::IssuesHelperPatch
+      end
+
+      if defined?(RedmineRt::IssuesControllerHelper) && !RedmineRt::IssuesControllerHelper.included_modules.include?(ExtraNotes::IssuesHelperPatch)
+        RedmineRt::IssuesControllerHelper.include ExtraNotes::IssuesHelperPatch
+      end
+    end
+
     def self.included(base)
       base.class_eval do
-        if method_defined?(:issue_history_tabs)
+        def append_extra_notes_tabs(tabs)
+          return tabs unless @issue.project.module_enabled?(:extra_notes) && @journals.present?
+
+          tab_types = ExtraNotesHelper.enabled_note_types.select { |t| t['use_tab'].to_s != '0' }
+          return tabs if tab_types.empty?
+
+          notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
+          insert_position = notes_index ? notes_index + 1 : tabs.size
+          offset = 0
+
+          tab_types.each do |note_type|
+            tab_name = "extra_notes_#{ExtraNotesHelper.effective_key(note_type)}"
+            tabs.insert(insert_position + offset, {
+              name: tab_name,
+              label: :label_extra_notes,
+              onclick: "showIssueHistory(\"#{tab_name}\", this.href)"
+            })
+            offset += 1
+          end
+
+          tabs
+        end
+
+        if method_defined?(:issue_history_tabs) && !method_defined?(:issue_history_tabs_without_extra_notes)
           def issue_history_tabs_with_extra_notes()
-            tabs = issue_history_tabs_without_extra_notes()
-
-            return tabs unless @issue.project.module_enabled?(:extra_notes) && @journals.present?
-
-            tab_types = ExtraNotesHelper.enabled_note_types.select { |t| t['use_tab'].to_s != '0' }
-            return tabs if tab_types.empty?
-
-            notes_index = tabs.find_index { |tab| tab[:name] == 'notes' }
-            insert_position = notes_index ? notes_index + 1 : tabs.size
-            offset = 0
-
-            tab_types.each do |note_type|
-              tab_name = "extra_notes_#{ExtraNotesHelper.effective_key(note_type)}"
-              tabs.insert(insert_position + offset, {
-                name: tab_name,
-                label: :label_extra_notes,
-                onclick: "showIssueHistory(\"#{tab_name}\", this.href)"
-              })
-              offset += 1
-            end
-
-            tabs
+            append_extra_notes_tabs(issue_history_tabs_without_extra_notes())
           end
 
           alias_method :issue_history_tabs_without_extra_notes, :issue_history_tabs
           alias_method :issue_history_tabs, :issue_history_tabs_with_extra_notes
+        end
+
+        if method_defined?(:issue_history_tabs_for_redmine_rt) && !method_defined?(:issue_history_tabs_for_redmine_rt_without_extra_notes)
+          def issue_history_tabs_for_redmine_rt_with_extra_notes()
+            append_extra_notes_tabs(issue_history_tabs_for_redmine_rt_without_extra_notes())
+          end
+
+          alias_method :issue_history_tabs_for_redmine_rt_without_extra_notes, :issue_history_tabs_for_redmine_rt
+          alias_method :issue_history_tabs_for_redmine_rt, :issue_history_tabs_for_redmine_rt_with_extra_notes
         end
       end
     end
   end
 end
 
-IssuesHelper.include ExtraNotes::IssuesHelperPatch if defined?(IssuesHelper)
+ExtraNotes::IssuesHelperPatch.apply
+Rails.configuration.to_prepare { ExtraNotes::IssuesHelperPatch.apply } if defined?(Rails)
