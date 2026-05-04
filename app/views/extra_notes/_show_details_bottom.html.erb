@@ -1,5 +1,19 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'extra_notes', plugin: 'redmine_extra_notes' %>
+  <script>
+    window.extraNotes = {
+      refreshHistoryTab: function() {
+        $('#history .tabs a[id^="tab-extra_notes_"]').each(function(_, el) {
+          const noteTypeId = el.id.replace('tab-extra_notes_', '');
+          if ($('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="' + noteTypeId + '"])').length > 0) {
+            el.style.display = '';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+      }
+    };
+  </script>
 <% end %>
 
 <%= render partial: 'extra_notes/show_extra_notes_tab', locals: { issue: issue } %>

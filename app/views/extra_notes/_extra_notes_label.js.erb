@@ -7,14 +7,8 @@ $("#change-<%= journal.id %> .extra-notes-label").remove();
 <% end %>
 
 // Refresh history tab
-$('#history .tabs a[id^="tab-extra_notes_"]').each(function(_, el) {
-  const noteTypeId = el.id.replace('tab-extra_notes_', '');
-  if ($('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="' + noteTypeId + '"])').length > 0) {
-    el.style.display = '';
-  } else {
-    el.style.display = 'none';
-  }
-});
+window.extraNotes.refreshHistoryTab();
+
 <% if journal.extra_attribute.present? %>
   $("#history .tabs #tab-extra_notes_<%= journal.extra_attribute.note_type %>").trigger("click");
 <% else %>
