@@ -6,57 +6,31 @@
 <% if tab_types.any? %>
 
 <script>
-(function() {
-  var extraNoteTabTypes = <%= raw tab_types.map { |t| { id: t['id'], key: ExtraNotesHelper.effective_key(t) } }.to_json %>;
+  window.extraNotes.init(
+    <%= raw tab_types.map {
+      |t| {
+        id: t['id'],
+        key: ExtraNotesHelper.effective_key(t),
+        label: (t['tab_label'].presence || t['label'].presence || "#{l(:label_extra_notes)} ##{t['order']}")
+      }
+    }.to_json %>
+  );
+</script>
 
-  // Override the default showIssueHistory function to handle extra note tabs
-  var originalShowIssueHistory = window.showIssueHistory;
-  window.showIssueHistory = function(journal, url) {
-    var extraTab = extraNoteTabTypes.find(function(t) { return 'extra_notes_' + t.key === journal; });
-
-    if (extraTab) {
-      originalShowIssueHistory('notes', url);
-      $('#tab-content-history').parent().find('.tabs a').removeClass('selected');
-      $('#tab-extra_notes_' + extraTab.key).addClass('selected');
-    } else {
-      originalShowIssueHistory(journal, url);
-    }
-
-    switch(journal) {
-      case 'notes':
-        extraNoteTabTypes.forEach(function(t) {
-          $('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="' + t.id + '"])').hide();
-        });
-        break;
-      default:
-        if (extraTab) {
-          $('#tab-content-history').find('.journal:not(:has(.extra-notes-label[data-note-type="' + extraTab.id + '"]))').hide();
-        }
-        break;
-    }
-
-    return false;
-  };
-
+<script>
   document.addEventListener('DOMContentLoaded', function() {
 <% tab_types.each do |nt| %>
     (function() {
       var el = document.getElementById('tab-extra_notes_<%= j(ExtraNotesHelper.effective_key(nt)) %>');
       if (el) {
-        // Set custom tab labels from settings
-        el.textContent = '<%= j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}") %>';
-
-        // Show or hide the tab based on whether there are any notes of this type
-        if ($('#tab-content-history').find('.journal:has(.extra-notes-label[data-note-type="<%= j(nt['id']) %>"])').length > 0) {
-          el.style.display = '';
-        } else {
-          el.style.display = 'none';
-        }
+        el.textContent = '<%=
+          j(nt['tab_label'].presence || nt['label'].presence || "#{l(:label_extra_notes)} ##{nt['order']}")
+        %>';
       }
     })();
 <% end %>
+    window.extraNotes.refreshHistoryTab();
   });
-})();
 </script>
 
 <% end %>

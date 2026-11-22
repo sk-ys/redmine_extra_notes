@@ -10,9 +10,9 @@ $("#change-<%= journal.id %> .extra-notes-label").remove();
 window.extraNotes.refreshHistoryTab();
 
 <% if journal.extra_attribute.present? %>
-  $("#history .tabs #tab-extra_notes_<%= journal.extra_attribute.note_type %>").trigger("click");
+  window.extraNotes.showTabForNoteType("<%= j(journal.extra_attribute.note_type) %>");
 <% else %>
-  $("#history .tabs #tab-notes").trigger("click");
+  window.extraNotes.showTabForNoteType("");
 <% end %>
 
 <% end %>
